@@ -2,7 +2,7 @@
 <html lang="zh">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
 <title>给你的话</title>
 
@@ -18,23 +18,16 @@ body{
 overflow:hidden;
 height:100vh;
 font-family:"Microsoft YaHei";
-background:black;
+background:#000;
 }
 
 .bg{
-
 position:fixed;
-
 width:100%;
-
 height:100%;
-
-background:url("bg.jpg") center center/cover;
-
-filter:blur(5px) brightness(.55);
-
+background:url(bg.jpg) center/cover;
+filter:blur(6px) brightness(.45);
 transform:scale(1.12);
-
 }
 
 .container{
@@ -47,35 +40,33 @@ left:50%;
 
 transform:translate(-50%,-50%);
 
-text-align:center;
+z-index:5;
 
-z-index:2;
+text-align:center;
 
 }
 
-.avatar-box{
+.avatar{
 
-width:190px;
+width:210px;
 
-height:190px;
+height:210px;
 
 border-radius:50%;
 
 overflow:hidden;
 
-border:4px solid rgba(255,255,255,.85);
+border:5px solid rgba(255,255,255,.9);
 
-box-shadow:0 0 35px rgba(255,255,255,.8);
+box-shadow:0 0 50px rgba(255,255,255,.8);
 
 animation:breathe 3s infinite;
 
 margin:auto;
 
-position:relative;
-
 }
 
-.avatar-box img{
+.avatar img{
 
 width:100%;
 
@@ -87,11 +78,9 @@ object-fit:cover;
 
 @keyframes breathe{
 
-0%{transform:scale(1)}
-
-50%{transform:scale(1.05)}
-
-100%{transform:scale(1)}
+50%{
+transform:scale(1.05)
+}
 
 }
 
@@ -99,21 +88,23 @@ object-fit:cover;
 
 margin-top:35px;
 
-width:340px;
-
-color:white;
-
-font-size:21px;
-
-line-height:1.8;
+width:360px;
 
 min-height:180px;
 
-transition:.3s;
+color:white;
 
-text-shadow:0 0 12px black;
+font-size:22px;
 
-padding:0 15px;
+line-height:1.9;
+
+text-shadow:0 0 15px black;
+
+opacity:1;
+
+transition:.5s;
+
+padding:10px;
 
 }
 
@@ -121,21 +112,21 @@ padding:0 15px;
 
 position:absolute;
 
-font-size:22px;
+font-size:34px;
 
-color:#ff5b81;
+pointer-events:none;
 
-animation:float 3.2s linear forwards;
+animation:fly linear forwards;
 
 }
 
-@keyframes float{
+@keyframes fly{
 
 0%{
 
 opacity:1;
 
-transform:translateY(0) scale(.6);
+transform:translateY(0) scale(.7);
 
 }
 
@@ -143,7 +134,7 @@ transform:translateY(0) scale(.6);
 
 opacity:0;
 
-transform:translateY(-180px) scale(1.5);
+transform:translateY(-300px) scale(1.8);
 
 }
 
@@ -153,7 +144,7 @@ transform:translateY(-180px) scale(1.5);
 
 position:absolute;
 
-bottom:40px;
+bottom:50px;
 
 width:100%;
 
@@ -161,23 +152,9 @@ text-align:center;
 
 color:white;
 
-opacity:.8;
-
 font-size:15px;
 
-z-index:5;
-
-animation:blink 1.5s infinite;
-
-}
-
-@keyframes blink{
-
-50%{
-
-opacity:.3;
-
-}
+z-index:9;
 
 }
 
@@ -191,57 +168,69 @@ opacity:.3;
 
 <div class="container">
 
-<div class="avatar-box">
+<div class="avatar">
 
 <img src="avatar.jpg">
 
 </div>
 
-<div class="text" id="text"></div>
+<div id="text" class="text"></div>
 
 </div>
 
-<div class="tap">
+<div class="tap">轻触开始</div>
 
-轻触屏幕开始
-
-</div>
-
-<audio id="music" loop>
-
+<audio id="music" loop playsinline webkit-playsinline>
 <source src="music.mp3">
-
 </audio>
 
 <script>
 
-const lines=[
+const paragraphs=[
 
-"提笔写下这些话的时候，窗外的风似乎都温柔了几分，而我的脑海里，反反复复浮现的，都是你的模样。",
+`提笔写下这些话的时候，窗外的风似乎都温柔了几分，而我的脑海里，反反复复浮现的，都是你的模样。`,
 
-"我从来没想过，一个人的出现，会让原本平淡的日子开始有了期待。",
+`我从来没想过，一个人的出现，会让原本平淡的日子开始有了期待。会在清晨醒来的时候，下意识想和你说一句早安。`,
 
-"会在清晨醒来的时候，下意识想和你说一句早安。",
+`会在看到好看的晚霞、遇见有趣的事情、吃到好吃的东西时，第一个想分享给你。`,
 
-"会在看到好看的晚霞，遇见有趣的事情时，第一个想到你。",
+`那些细碎又平常的瞬间里，喜欢慢慢生根发芽。`,
 
-"那些细碎又平常的瞬间，让喜欢慢慢长大。",
+`你像一束温柔的光，照进我的生活。`,
 
-"你像一束温柔的光，悄悄照进我的生活。",
+`喜欢你这件事，不是一时兴起。`,
 
-"喜欢你这件事，不是一时兴起。",
-
-"而是在无数个瞬间里，越来越确定。"
+`而是在无数个平凡瞬间里，越来越确定。`
 
 ]
 
-let current=0
-
-let started=false
-
 const text=document.getElementById("text")
 
-function speakSentence(content){
+let index=0
+
+function typeText(str){
+
+text.innerHTML=""
+
+let i=0
+
+let timer=setInterval(()=>{
+
+text.innerHTML+=str[i]
+
+i++
+
+if(i>=str.length){
+
+clearInterval(timer)
+
+}
+
+},35)
+
+}
+
+function speak(content){
 
 speechSynthesis.cancel()
 
@@ -249,11 +238,27 @@ let speech=new SpeechSynthesisUtterance(content)
 
 speech.lang="zh-CN"
 
-speech.rate=1.12
+speech.rate=1.05
 
-speech.pitch=0.78
+speech.pitch=.75
 
 speech.volume=1
+
+const voices=speechSynthesis.getVoices()
+
+const male=voices.find(v=>
+
+v.lang.includes("zh") ||
+
+v.name.includes("Male")
+
+)
+
+if(male){
+
+speech.voice=male
+
+}
 
 speech.onend=()=>{
 
@@ -261,13 +266,11 @@ text.style.opacity=0
 
 setTimeout(()=>{
 
-text.innerHTML=""
+index++
 
-current++
+showNext()
 
-showSentence()
-
-},250)
+},500)
 
 }
 
@@ -275,9 +278,9 @@ speechSynthesis.speak(speech)
 
 }
 
-function showSentence(){
+function showNext(){
 
-if(current>=lines.length){
+if(index>=paragraphs.length){
 
 text.innerHTML="❤"
 
@@ -287,73 +290,55 @@ return
 
 text.style.opacity=1
 
-let str=lines[current]
+typeText(paragraphs[index])
 
-let i=0
-
-text.innerHTML=""
-
-speakSentence(str)
-
-let timer=setInterval(()=>{
-
-if(i<str.length){
-
-text.innerHTML += str.charAt(i)
-
-i++
-
-}else{
-
-clearInterval(timer)
-
-}
-
-},42)
+speak(paragraphs[index])
 
 }
 
 function createHeart(){
 
-let heart=document.createElement("div")
+const h=document.createElement("div")
 
-heart.className="heart"
+h.className="heart"
 
-heart.innerHTML="❤"
+h.innerHTML="❤"
 
-let x=(window.innerWidth/2)-70+Math.random()*140
+h.style.left=Math.random()*window.innerWidth+"px"
 
-let y=(window.innerHeight/2)+40
+h.style.top=window.innerHeight+"px"
 
-heart.style.left=x+"px"
+h.style.fontSize=(20+Math.random()*35)+"px"
 
-heart.style.top=y+"px"
+h.style.animationDuration=(2+Math.random()*2)+"s"
 
-document.body.appendChild(heart)
+h.style.color=`rgba(255,${50+Math.random()*100},${100+Math.random()*100},0.9)`
+
+document.body.appendChild(h)
 
 setTimeout(()=>{
 
-heart.remove()
+h.remove()
 
-},3200)
-
-}
-
-setInterval(createHeart,220)
-
-document.body.onclick=()=>{
-
-if(started) return
-
-started=true
-
-document.querySelector(".tap").remove()
-
-document.getElementById("music").play()
-
-showSentence()
+},4000)
 
 }
+
+setInterval(createHeart,120)
+
+document.body.addEventListener("click",()=>{
+
+document.querySelector(".tap")?.remove()
+
+const m=document.getElementById("music")
+
+m.volume=.7
+
+m.play().catch(()=>{})
+
+showNext()
+
+},{once:true})
 
 </script>
 
