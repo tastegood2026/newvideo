@@ -2,10 +2,12 @@
 <html lang="zh">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
 <title>给你的话</title>
 
 <style>
+
 *{
 margin:0;
 padding:0;
@@ -16,88 +18,171 @@ body{
 overflow:hidden;
 height:100vh;
 font-family:"Microsoft YaHei";
+background:black;
 }
 
 .bg{
+
 position:fixed;
+
 width:100%;
+
 height:100%;
-background:url("bg.jpg") center/cover;
-filter:blur(4px) brightness(0.55);
-transform:scale(1.1);
+
+background:url("bg.jpg") center center/cover;
+
+filter:blur(5px) brightness(.55);
+
+transform:scale(1.12);
+
 }
 
 .container{
+
 position:absolute;
+
 top:50%;
+
 left:50%;
+
 transform:translate(-50%,-50%);
+
 text-align:center;
+
 z-index:2;
+
 }
 
 .avatar-box{
-width:180px;
-height:180px;
+
+width:190px;
+
+height:190px;
+
 border-radius:50%;
+
 overflow:hidden;
-border:4px solid rgba(255,255,255,.8);
-box-shadow:0 0 40px rgba(255,255,255,.8);
+
+border:4px solid rgba(255,255,255,.85);
+
+box-shadow:0 0 35px rgba(255,255,255,.8);
+
 animation:breathe 3s infinite;
+
 margin:auto;
+
 position:relative;
+
 }
 
 .avatar-box img{
+
 width:100%;
+
 height:100%;
+
 object-fit:cover;
+
 }
 
 @keyframes breathe{
+
 0%{transform:scale(1)}
+
 50%{transform:scale(1.05)}
+
 100%{transform:scale(1)}
+
 }
 
 .text{
+
 margin-top:35px;
-width:320px;
+
+width:340px;
+
 color:white;
-font-size:20px;
+
+font-size:21px;
+
 line-height:1.8;
-min-height:150px;
+
+min-height:180px;
+
+transition:.3s;
+
 text-shadow:0 0 12px black;
+
+padding:0 15px;
+
 }
 
 .heart{
+
 position:absolute;
-color:#ff4d6d;
-font-size:20px;
-animation:float 4s linear forwards;
+
+font-size:22px;
+
+color:#ff5b81;
+
+animation:float 3.2s linear forwards;
+
 }
 
 @keyframes float{
+
 0%{
+
 opacity:1;
-transform:translateY(0) scale(.5);
+
+transform:translateY(0) scale(.6);
+
 }
+
 100%{
+
 opacity:0;
-transform:translateY(-260px) scale(1.4);
+
+transform:translateY(-180px) scale(1.5);
+
 }
+
 }
 
 .tap{
+
 position:absolute;
-bottom:30px;
+
+bottom:40px;
+
 width:100%;
+
 text-align:center;
+
 color:white;
-font-size:14px;
-opacity:.7;
+
+opacity:.8;
+
+font-size:15px;
+
+z-index:5;
+
+animation:blink 1.5s infinite;
+
 }
+
+@keyframes blink{
+
+50%{
+
+opacity:.3;
+
+}
+
+}
+
 </style>
+
 </head>
 
 <body>
@@ -107,7 +192,9 @@ opacity:.7;
 <div class="container">
 
 <div class="avatar-box">
+
 <img src="avatar.jpg">
+
 </div>
 
 <div class="text" id="text"></div>
@@ -115,11 +202,15 @@ opacity:.7;
 </div>
 
 <div class="tap">
-轻触页面开始
+
+轻触屏幕开始
+
 </div>
 
 <audio id="music" loop>
+
 <source src="music.mp3">
+
 </audio>
 
 <script>
@@ -132,11 +223,11 @@ const lines=[
 
 "会在清晨醒来的时候，下意识想和你说一句早安。",
 
-"喜欢看到晚霞时第一时间想到你。",
+"会在看到好看的晚霞，遇见有趣的事情时，第一个想到你。",
 
-"喜欢那些平凡瞬间里慢慢长出来的在意。",
+"那些细碎又平常的瞬间，让喜欢慢慢长大。",
 
-"你像一束温柔的光，照进我的生活。",
+"你像一束温柔的光，悄悄照进我的生活。",
 
 "喜欢你这件事，不是一时兴起。",
 
@@ -144,95 +235,123 @@ const lines=[
 
 ]
 
-let idx=0
+let current=0
 
-const box=document.getElementById("text")
+let started=false
 
-function showSentence(){
+const text=document.getElementById("text")
 
-if(idx>=lines.length)return
+function speakSentence(content){
 
-let str=lines[idx]
+speechSynthesis.cancel()
 
-let i=0
-
-box.innerHTML=""
-
-let timer=setInterval(()=>{
-
-box.innerHTML+=str[i]
-
-speak(str[i])
-
-i++
-
-if(i>=str.length){
-
-clearInterval(timer)
-
-setTimeout(()=>{
-
-box.innerHTML=""
-
-idx++
-
-showSentence()
-
-},2500)
-
-}
-
-},120)
-
-}
-
-function speak(txt){
-
-let speech=new SpeechSynthesisUtterance(txt)
+let speech=new SpeechSynthesisUtterance(content)
 
 speech.lang="zh-CN"
 
-speech.rate=0.95
+speech.rate=1.12
 
-speech.pitch=1
+speech.pitch=0.78
 
 speech.volume=1
+
+speech.onend=()=>{
+
+text.style.opacity=0
+
+setTimeout(()=>{
+
+text.innerHTML=""
+
+current++
+
+showSentence()
+
+},250)
+
+}
 
 speechSynthesis.speak(speech)
 
 }
 
-function createHeart(){
+function showSentence(){
 
-let h=document.createElement("div")
+if(current>=lines.length){
 
-h.className="heart"
+text.innerHTML="❤"
 
-h.innerHTML="❤"
-
-h.style.left=(window.innerWidth/2-80+Math.random()*160)+"px"
-
-h.style.top=(window.innerHeight/2+30)+"px"
-
-document.body.appendChild(h)
-
-setTimeout(()=>{
-
-h.remove()
-
-},4000)
+return
 
 }
 
-setInterval(createHeart,350)
+text.style.opacity=1
+
+let str=lines[current]
+
+let i=0
+
+text.innerHTML=""
+
+speakSentence(str)
+
+let timer=setInterval(()=>{
+
+if(i<str.length){
+
+text.innerHTML += str.charAt(i)
+
+i++
+
+}else{
+
+clearInterval(timer)
+
+}
+
+},42)
+
+}
+
+function createHeart(){
+
+let heart=document.createElement("div")
+
+heart.className="heart"
+
+heart.innerHTML="❤"
+
+let x=(window.innerWidth/2)-70+Math.random()*140
+
+let y=(window.innerHeight/2)+40
+
+heart.style.left=x+"px"
+
+heart.style.top=y+"px"
+
+document.body.appendChild(heart)
+
+setTimeout(()=>{
+
+heart.remove()
+
+},3200)
+
+}
+
+setInterval(createHeart,220)
 
 document.body.onclick=()=>{
+
+if(started) return
+
+started=true
+
+document.querySelector(".tap").remove()
 
 document.getElementById("music").play()
 
 showSentence()
-
-document.querySelector(".tap").remove()
 
 }
 
