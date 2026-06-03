@@ -8,11 +8,7 @@
 
 <style>
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-}
+*{margin:0;padding:0;box-sizing:border-box;}
 
 body{
 overflow:hidden;
@@ -27,139 +23,79 @@ width:100%;
 height:100%;
 background:url(bg.jpg) center/cover;
 filter:blur(6px) brightness(.45);
-transform:scale(1.12);
+transform:scale(1.1);
 }
 
 .container{
-
 position:absolute;
-
 top:50%;
-
 left:50%;
-
 transform:translate(-50%,-50%);
-
-z-index:5;
-
 text-align:center;
-
+z-index:5;
 }
 
 .avatar{
-
 width:210px;
-
 height:210px;
-
 border-radius:50%;
-
 overflow:hidden;
-
-border:5px solid rgba(255,255,255,.9);
-
-box-shadow:0 0 50px rgba(255,255,255,.8);
-
-animation:breathe 3s infinite;
-
 margin:auto;
-
+border:5px solid rgba(255,255,255,.9);
+box-shadow:0 0 50px rgba(255,255,255,.8);
+animation:breathe 3s infinite;
 }
 
 .avatar img{
-
 width:100%;
-
 height:100%;
-
 object-fit:cover;
-
 }
 
 @keyframes breathe{
-
-50%{
-transform:scale(1.05)
-}
-
+50%{transform:scale(1.05)}
 }
 
 .text{
-
-margin-top:35px;
-
 width:360px;
-
 min-height:180px;
-
-color:white;
-
-font-size:22px;
-
+margin-top:35px;
+font-size:23px;
 line-height:1.9;
-
+color:white;
 text-shadow:0 0 15px black;
-
-opacity:1;
-
-transition:.5s;
-
-padding:10px;
-
+transition:.45s;
 }
 
 .heart{
-
 position:absolute;
-
-font-size:34px;
-
 pointer-events:none;
-
 animation:fly linear forwards;
-
 }
 
 @keyframes fly{
 
 0%{
-
 opacity:1;
-
 transform:translateY(0) scale(.7);
-
 }
 
 100%{
-
 opacity:0;
-
-transform:translateY(-300px) scale(1.8);
-
+transform:translateY(-350px) scale(1.8);
 }
 
 }
 
 .tap{
-
 position:absolute;
-
-bottom:50px;
-
+bottom:40px;
 width:100%;
-
 text-align:center;
-
 color:white;
-
-font-size:15px;
-
-z-index:9;
-
 }
 
 </style>
-
 </head>
 
 <body>
@@ -169,46 +105,44 @@ z-index:9;
 <div class="container">
 
 <div class="avatar">
-
 <img src="avatar.jpg">
-
 </div>
 
 <div id="text" class="text"></div>
 
 </div>
 
-<div class="tap">轻触开始</div>
+<div class="tap">点击开始</div>
 
-<audio id="music" loop playsinline webkit-playsinline>
+<audio id="music" loop playsinline>
 <source src="music.mp3">
 </audio>
 
 <script>
 
-const paragraphs=[
+const raw=`提笔写下这些话的时候，窗外的风似乎都温柔了几分，而我的脑海里，反反复复浮现的，都是你的模样。
 
-`提笔写下这些话的时候，窗外的风似乎都温柔了几分，而我的脑海里，反反复复浮现的，都是你的模样。`,
+我从来没想过，一个人的出现，会让原本平淡的日子开始有了期待。会在清晨醒来的时候，下意识想和你说一句早安。
 
-`我从来没想过，一个人的出现，会让原本平淡的日子开始有了期待。会在清晨醒来的时候，下意识想和你说一句早安。`,
+会在看到好看的晚霞、遇见有趣的事情、吃到好吃的东西时，第一时间想分享给你。
 
-`会在看到好看的晚霞、遇见有趣的事情、吃到好吃的东西时，第一个想分享给你。`,
+这份喜欢，没有轰轰烈烈的开场，也没有刻意制造的浪漫。
 
-`那些细碎又平常的瞬间里，喜欢慢慢生根发芽。`,
+你像一束温柔的光，悄悄照进我的生活。
 
-`你像一束温柔的光，照进我的生活。`,
+喜欢你这件事，不是一时兴起，而是在无数个平凡瞬间里，越来越确定的答案。`
 
-`喜欢你这件事，不是一时兴起。`,
-
-`而是在无数个平凡瞬间里，越来越确定。`
-
-]
+const lines=raw
+.replace(/\n/g,"")
+.split(/[，。！？；]/)
+.map(v=>v.trim())
+.filter(Boolean)
 
 const text=document.getElementById("text")
 
-let index=0
+let idx=0
 
-function typeText(str){
+function typeSentence(str){
 
 text.innerHTML=""
 
@@ -216,37 +150,39 @@ let i=0
 
 let timer=setInterval(()=>{
 
+if(i<str.length){
+
 text.innerHTML+=str[i]
 
 i++
 
-if(i>=str.length){
+}else{
 
 clearInterval(timer)
 
 }
 
-},35)
+},45)
 
 }
 
-function speak(content){
+function speak(str){
 
 speechSynthesis.cancel()
 
-let speech=new SpeechSynthesisUtterance(content)
+let speech=new SpeechSynthesisUtterance(str)
 
 speech.lang="zh-CN"
 
-speech.rate=1.05
+speech.rate=0.98
 
-speech.pitch=.75
+speech.pitch=0.75
 
 speech.volume=1
 
-const voices=speechSynthesis.getVoices()
+let voices=speechSynthesis.getVoices()
 
-const male=voices.find(v=>
+let maleVoice=voices.find(v=>
 
 v.lang.includes("zh") ||
 
@@ -254,9 +190,9 @@ v.name.includes("Male")
 
 )
 
-if(male){
+if(maleVoice){
 
-speech.voice=male
+speech.voice=maleVoice
 
 }
 
@@ -266,11 +202,11 @@ text.style.opacity=0
 
 setTimeout(()=>{
 
-index++
+idx++
 
-showNext()
+playNext()
 
-},500)
+},250)
 
 }
 
@@ -278,9 +214,9 @@ speechSynthesis.speak(speech)
 
 }
 
-function showNext(){
+function playNext(){
 
-if(index>=paragraphs.length){
+if(idx>=lines.length){
 
 text.innerHTML="❤"
 
@@ -290,13 +226,13 @@ return
 
 text.style.opacity=1
 
-typeText(paragraphs[index])
+typeSentence(lines[idx])
 
-speak(paragraphs[index])
+speak(lines[idx])
 
 }
 
-function createHeart(){
+function heart(){
 
 const h=document.createElement("div")
 
@@ -308,35 +244,25 @@ h.style.left=Math.random()*window.innerWidth+"px"
 
 h.style.top=window.innerHeight+"px"
 
-h.style.fontSize=(20+Math.random()*35)+"px"
+h.style.fontSize=(25+Math.random()*40)+"px"
 
 h.style.animationDuration=(2+Math.random()*2)+"s"
 
-h.style.color=`rgba(255,${50+Math.random()*100},${100+Math.random()*100},0.9)`
-
 document.body.appendChild(h)
 
-setTimeout(()=>{
-
-h.remove()
-
-},4000)
+setTimeout(()=>h.remove(),4000)
 
 }
 
-setInterval(createHeart,120)
+setInterval(heart,100)
 
 document.body.addEventListener("click",()=>{
 
-document.querySelector(".tap")?.remove()
+document.querySelector(".tap").remove()
 
-const m=document.getElementById("music")
+document.getElementById("music").play()
 
-m.volume=.7
-
-m.play().catch(()=>{})
-
-showNext()
+playNext()
 
 },{once:true})
 
