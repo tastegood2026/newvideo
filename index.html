@@ -1,272 +1,427 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-
-<title>给你的话</title>
-
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>给你的一点点告别</title>
 <style>
+  :root{
+    --bg-dark: rgba(5,8,12,.58);
+    --panel: rgba(255,255,255,.06);
+    --text: rgba(255,255,255,.92);
+    --muted: rgba(255,255,255,.62);
+  }
 
-*{margin:0;padding:0;box-sizing:border-box;}
+  *{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+  }
 
-body{
-overflow:hidden;
-height:100vh;
-font-family:"Microsoft YaHei";
-background:#000;
-}
+  html,body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:#000;
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+  }
 
-.bg{
-position:fixed;
-width:100%;
-height:100%;
-background:url(bg.jpg) center/cover;
-filter:blur(6px) brightness(.45);
-transform:scale(1.1);
-}
+  body{
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--text);
+  }
 
-.container{
-position:absolute;
-top:50%;
-left:50%;
-transform:translate(-50%,-50%);
-text-align:center;
-z-index:5;
-}
+  #bg{
+    position:fixed;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    filter: blur(18px) brightness(.36) saturate(.8) contrast(.98);
+    transform: scale(1.08);
+    z-index:-4;
+  }
 
-.avatar{
-width:210px;
-height:210px;
-border-radius:50%;
-overflow:hidden;
-margin:auto;
-border:5px solid rgba(255,255,255,.9);
-box-shadow:0 0 50px rgba(255,255,255,.8);
-animation:breathe 3s infinite;
-}
+  #veil{
+    position:fixed;
+    inset:0;
+    background:
+      radial-gradient(circle at 50% 38%, rgba(255,255,255,.06), rgba(0,0,0,0) 42%),
+      linear-gradient(180deg, rgba(0,0,0,.22), rgba(0,0,0,.68));
+    z-index:-3;
+  }
 
-.avatar img{
-width:100%;
-height:100%;
-object-fit:cover;
-}
+  #stars{
+    position:fixed;
+    inset:0;
+    overflow:hidden;
+    pointer-events:none;
+    z-index:-2;
+  }
 
-@keyframes breathe{
-50%{transform:scale(1.05)}
-}
+  .star{
+    position:absolute;
+    top:-10vh;
+    color:rgba(255,255,255,.86);
+    text-shadow:0 0 10px rgba(255,255,255,.4);
+    filter: drop-shadow(0 0 8px rgba(255,255,255,.15));
+    animation-name:fall;
+    animation-timing-function:linear;
+    animation-fill-mode:forwards;
+    user-select:none;
+    pointer-events:none;
+  }
 
-.text{
-width:360px;
-min-height:180px;
-margin-top:35px;
-font-size:23px;
-line-height:1.9;
-color:white;
-text-shadow:0 0 15px black;
-transition:.45s;
-}
+  @keyframes fall{
+    0%{
+      opacity:0;
+      transform:translate3d(0,-8vh,0) rotate(0deg);
+    }
+    12%{opacity:1;}
+    100%{
+      opacity:0;
+      transform:translate3d(var(--dx),110vh,0) rotate(360deg);
+    }
+  }
 
-.heart{
-position:absolute;
-pointer-events:none;
-animation:fly linear forwards;
-}
+  .wrap{
+    position:relative;
+    z-index:1;
+    width:min(92vw, 470px);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:18px;
+    padding:24px 12px 34px;
+  }
 
-@keyframes fly{
+  .avatar-shell{
+    width:148px;
+    height:148px;
+    padding:8px;
+    border-radius:50%;
+    background:rgba(255,255,255,.06);
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,.11),
+      0 16px 48px rgba(0,0,0,.36);
+    backdrop-filter: blur(10px);
+    animation:breathe 4.8s ease-in-out infinite;
+  }
 
-0%{
-opacity:1;
-transform:translateY(0) scale(.7);
-}
+  .avatar-shell img{
+    width:100%;
+    height:100%;
+    display:block;
+    border-radius:50%;
+    object-fit:cover;
+    filter:grayscale(.08) brightness(.88) contrast(1.04);
+  }
 
-100%{
-opacity:0;
-transform:translateY(-350px) scale(1.8);
-}
+  @keyframes breathe{
+    0%,100%{transform:scale(1);}
+    50%{transform:scale(1.055);}
+  }
 
-}
+  .title{
+    font-size:14px;
+    letter-spacing:.22em;
+    color:rgba(255,255,255,.44);
+    text-transform:uppercase;
+    transform:translateY(2px);
+    user-select:none;
+  }
 
-.tap{
-position:absolute;
-bottom:40px;
-width:100%;
-text-align:center;
-color:white;
-}
+  #textBox{
+    width:100%;
+    min-height:168px;
+    padding:4px 14px 0;
+    text-align:center;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
 
+  #text{
+    width:100%;
+    font-size:clamp(22px, 5vw, 30px);
+    line-height:1.9;
+    font-weight:600;
+    color:var(--text);
+    text-shadow:0 0 16px rgba(0,0,0,.42);
+    opacity:0;
+    transform:translateY(10px);
+    transition:opacity .8s ease, transform .8s ease, letter-spacing .8s ease, font-size .8s ease;
+    word-break:break-word;
+    white-space:pre-wrap;
+  }
+
+  #text.show{
+    opacity:1;
+    transform:translateY(0);
+  }
+
+  #text.final{
+    font-size:clamp(18px, 4vw, 22px);
+    letter-spacing:.18em;
+    color:rgba(255,255,255,.76);
+    text-shadow:0 0 12px rgba(0,0,0,.34);
+  }
+
+  #text.tiny{
+    font-size:18px;
+    letter-spacing:.55em;
+    color:rgba(255,255,255,.5);
+    font-weight:500;
+  }
+
+  .char{
+    display:inline-block;
+    animation:charIn .22s ease both;
+  }
+
+  @keyframes charIn{
+    0%{
+      opacity:0;
+      transform:translateY(10px) scale(.72);
+      filter:blur(4px);
+    }
+    100%{
+      opacity:1;
+      transform:translateY(0) scale(1);
+      filter:blur(0);
+    }
+  }
+
+  .hint{
+    color:var(--muted);
+    font-size:13px;
+    letter-spacing:.08em;
+    margin-top:-2px;
+    user-select:none;
+  }
+
+  #startMask{
+    position:fixed;
+    inset:0;
+    z-index:20;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    gap:16px;
+    background:
+      radial-gradient(circle at 50% 36%, rgba(255,255,255,.06), rgba(0,0,0,0) 34%),
+      linear-gradient(180deg, rgba(0,0,0,.72), rgba(0,0,0,.52));
+    backdrop-filter: blur(8px);
+  }
+
+  .startCard{
+    width:min(86vw, 360px);
+    padding:28px 22px 24px;
+    border-radius:24px;
+    background:rgba(255,255,255,.055);
+    border:1px solid rgba(255,255,255,.12);
+    box-shadow:0 18px 40px rgba(0,0,0,.26);
+    text-align:center;
+  }
+
+  .startTitle{
+    font-size:18px;
+    font-weight:700;
+    letter-spacing:.08em;
+    margin-bottom:10px;
+  }
+
+  .startSub{
+    font-size:13px;
+    line-height:1.8;
+    color:rgba(255,255,255,.66);
+    margin-bottom:18px;
+  }
+
+  #btn{
+    border:none;
+    outline:none;
+    padding:15px 34px;
+    border-radius:999px;
+    font-size:17px;
+    font-weight:700;
+    color:#151515;
+    background:linear-gradient(180deg, #efefef, #bfbfbf);
+    box-shadow:0 12px 30px rgba(0,0,0,.28);
+  }
+
+  #btn:active{
+    transform:scale(.97);
+  }
+
+  @media (max-width:480px){
+    .avatar-shell{
+      width:128px;
+      height:128px;
+    }
+    #textBox{
+      min-height:150px;
+    }
+    .title{
+      font-size:12px;
+    }
+  }
 </style>
 </head>
-
 <body>
+<img id="bg" alt="">
+<div id="veil"></div>
+<div id="stars"></div>
 
-<div class="bg"></div>
-
-<div class="container">
-
-<div class="avatar">
-<img src="avatar.jpg">
+<div id="startMask">
+  <div class="startCard">
+    <div class="startTitle">点一下开始</div>
+    <div class="startSub">
+      这是一段很安静的告别。<br>
+      记得把声音打开。
+    </div>
+    <button id="btn">开始</button>
+  </div>
 </div>
 
-<div id="text" class="text"></div>
+<div class="wrap">
+  <div class="avatar-shell">
+    <img id="avatar" alt="">
+  </div>
 
+  <div class="title">my last words</div>
+
+  <div id="textBox">
+    <div id="text"></div>
+  </div>
+
+  <div class="hint">星星会一直落下，直到最后一句出现</div>
 </div>
 
-<div class="tap">点击开始</div>
-
-<audio id="music" loop playsinline>
-<source src="music.mp3">
-</audio>
+<audio id="bgm" loop preload="auto"></audio>
 
 <script>
-
-const raw=`提笔写下这些话的时候，窗外的风似乎都温柔了几分，而我的脑海里，反反复复浮现的，都是你的模样。
-
-我从来没想过，一个人的出现，会让原本平淡的日子开始有了期待。会在清晨醒来的时候，下意识想和你说一句早安。
-
-会在看到好看的晚霞、遇见有趣的事情、吃到好吃的东西时，第一时间想分享给你。
-
-这份喜欢，没有轰轰烈烈的开场，也没有刻意制造的浪漫。
-
-你像一束温柔的光，悄悄照进我的生活。
-
-喜欢你这件事，不是一时兴起，而是在无数个平凡瞬间里，越来越确定的答案。`
-
-const lines=raw
-.replace(/\n/g,"")
-.split(/[，。！？；]/)
-.map(v=>v.trim())
-.filter(Boolean)
-
-const text=document.getElementById("text")
-
-let idx=0
-
-function typeSentence(str){
-
-text.innerHTML=""
-
-let i=0
-
-let timer=setInterval(()=>{
-
-if(i<str.length){
-
-text.innerHTML+=str[i]
-
-i++
-
-}else{
-
-clearInterval(timer)
-
-}
-
-},45)
-
-}
-
-function speak(str){
-
-speechSynthesis.cancel()
-
-let speech=new SpeechSynthesisUtterance(str)
-
-speech.lang="zh-CN"
-
-speech.rate=0.98
-
-speech.pitch=0.75
-
-speech.volume=1
-
-let voices=speechSynthesis.getVoices()
-
-let maleVoice=voices.find(v=>
-
-v.lang.includes("zh") ||
-
-v.name.includes("Male")
-
-)
-
-if(maleVoice){
-
-speech.voice=maleVoice
-
-}
-
-speech.onend=()=>{
-
-text.style.opacity=0
-
-setTimeout(()=>{
-
-idx++
-
-playNext()
-
-},250)
-
-}
-
-speechSynthesis.speak(speech)
-
-}
-
-function playNext(){
-
-if(idx>=lines.length){
-
-text.innerHTML="❤"
-
-return
-
-}
-
-text.style.opacity=1
-
-typeSentence(lines[idx])
-
-speak(lines[idx])
-
-}
-
-function heart(){
-
-const h=document.createElement("div")
-
-h.className="heart"
-
-h.innerHTML="❤"
-
-h.style.left=Math.random()*window.innerWidth+"px"
-
-h.style.top=window.innerHeight+"px"
-
-h.style.fontSize=(25+Math.random()*40)+"px"
-
-h.style.animationDuration=(2+Math.random()*2)+"s"
-
-document.body.appendChild(h)
-
-setTimeout(()=>h.remove(),4000)
-
-}
-
-setInterval(heart,100)
-
-document.body.addEventListener("click",()=>{
-
-document.querySelector(".tap").remove()
-
-document.getElementById("music").play()
-
-playNext()
-
-},{once:true})
-
+  const bg = document.getElementById('bg');
+  const avatar = document.getElementById('avatar');
+  const bgm = document.getElementById('bgm');
+  const startMask = document.getElementById('startMask');
+  const text = document.getElementById('text');
+  const stars = document.getElementById('stars');
+
+  bg.src = 'my girl.png';
+  avatar.src = 'avatar.jpg';
+  bgm.src = '我只能离开.mp3';
+
+  const lines = [
+    "宝宝",
+    "这可能是我最后一次叫你宝宝了",
+    "我想了很久",
+    "也终于想通了",
+    "也许放手是我最好的选择",
+    "我爱你是真的",
+    "因为你伤心也是真的",
+    "我想或许我不再纠缠你",
+    "不再打扰你",
+    "你就能开心",
+    "我真的好喜欢你",
+    "但是我忘了你没有遇到我时",
+    "那么开朗",
+    "那么爱笑",
+    "我就知道我该放手了",
+    "我比任何人都爱你",
+    "但是我却比不过任何人",
+    "很抱歉这段时间对你的打扰",
+    "我只想你好好的",
+    "只想要你天天开心",
+    "我希望我的离开能让你开心",
+    "遇到你使我这辈子最大幸运",
+    "但是失去你也是我这辈子最大的遗憾",
+    "再也不见了",
+    "您"
+  ];
+
+  const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+
+  function spawnStar(){
+    const el = document.createElement('div');
+    el.className = 'star';
+    const glyphs = ['✦','✧','✩','✶','✺'];
+    el.textContent = glyphs[Math.floor(Math.random() * glyphs.length)];
+    el.style.left = Math.random() * 100 + 'vw';
+    el.style.fontSize = (Math.random() * 12 + 9) + 'px';
+    el.style.setProperty('--dx', (Math.random() * 120 - 60).toFixed(0) + 'px');
+    el.style.animationDuration = (Math.random() * 4.8 + 4.2).toFixed(2) + 's';
+    el.style.opacity = '0';
+    stars.appendChild(el);
+    setTimeout(() => el.remove(), 11000);
+  }
+
+  let starTimer = null;
+
+  function startStars(){
+    spawnStar();
+    starTimer = setInterval(spawnStar, 180);
+  }
+
+  async function typeLine(line){
+    text.classList.remove('final','tiny');
+    text.classList.add('show');
+    text.innerHTML = '';
+
+    if(line === '您'){
+      text.classList.add('tiny');
+    }
+
+    for(let i = 0; i < line.length; i++){
+      const span = document.createElement('span');
+      span.className = 'char';
+      span.textContent = line[i] === ' ' ? '\u00A0' : line[i];
+      text.appendChild(span);
+      await sleep(120);
+    }
+  }
+
+  async function play(){
+    for(let i = 0; i < lines.length; i++){
+      const line = lines[i];
+      await typeLine(line);
+
+      if(i === lines.length - 1){
+        text.classList.add('show');
+        text.classList.add('final');
+        await sleep(5000);
+        return;
+      }
+
+      await sleep(2150);
+      text.classList.remove('show');
+      await sleep(850);
+    }
+  }
+
+  document.getElementById('btn').addEventListener('click', async () => {
+    startMask.style.opacity = '0';
+    startMask.style.pointerEvents = 'none';
+    setTimeout(() => startMask.remove(), 400);
+
+    try{
+      await bgm.play();
+    }catch(e){
+      console.warn('audio play failed:', e);
+    }
+
+    startStars();
+    play();
+  });
+
+  window.addEventListener('beforeunload', () => {
+    if(starTimer) clearInterval(starTimer);
+  });
 </script>
-
 </body>
 </html>
