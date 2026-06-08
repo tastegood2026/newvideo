@@ -1,318 +1,310 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<title>最后的话</title>
-
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>给你的一点点告别</title>
 <style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-}
+  :root{
+    --bg-dark: rgba(5,8,12,.58);
+    --panel: rgba(255,255,255,.06);
+    --text: rgba(255,255,255,.92);
+    --muted: rgba(255,255,255,.62);
+  }
 
-html,body{
-width:100%;
-height:100%;
-overflow:hidden;
-font-family:"Microsoft YaHei",sans-serif;
-background:#000;
-}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{width:100%;height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;}
+  body{position:relative;display:flex;align-items:center;justify-content:center;color:var(--text);}
 
-body{
-display:flex;
-justify-content:center;
-align-items:center;
-position:relative;
-}
+  /* 背景图 */
+  #bg{
+    position:fixed;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    filter: blur(18px) brightness(.36) saturate(.8) contrast(.98);
+    transform: scale(1.08);
+    z-index:-4;
+  }
 
-/* 背景图 */
-.bg{
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background:url("my_girl.png") center center/cover no-repeat;
-  filter:blur(12px) brightness(35%);
-  transform:scale(1.1);
-  z-index:-3;
-}
-/* 遮罩 */
-.overlay{
-position:fixed;
-inset:0;
-background:rgba(0,0,0,.35);
-z-index:-2;
-}
+  #veil{
+    position:fixed;
+    inset:0;
+    background:
+      radial-gradient(circle at 50% 38%, rgba(255,255,255,.06), rgba(0,0,0,0) 42%),
+      linear-gradient(180deg, rgba(0,0,0,.22), rgba(0,0,0,.68));
+    z-index:-3;
+  }
 
-/* 星星 */
-.star{
-position:absolute;
-color:white;
-pointer-events:none;
-animation:fall linear forwards;
-}
+  #stars{
+    position:fixed;
+    inset:0;
+    overflow:hidden;
+    pointer-events:none;
+    z-index:-2;
+  }
 
-@keyframes fall{
-0%{
-transform:translateY(-50px);
-opacity:0;
-}
-10%{
-opacity:1;
-}
-100%{
-transform:translateY(110vh);
-opacity:0;
-}
-}
+  .star{
+    position:absolute;
+    top:-10vh;
+    color:rgba(255,255,255,.86);
+    text-shadow:0 0 10px rgba(255,255,255,.4);
+    filter: drop-shadow(0 0 8px rgba(255,255,255,.15));
+    animation-name:fall;
+    animation-timing-function:linear;
+    animation-fill-mode:forwards;
+    user-select:none;
+    pointer-events:none;
+  }
 
-/* 主体 */
-.container{
-width:90%;
-max-width:500px;
-text-align:center;
-}
+  @keyframes fall{
+    0%{opacity:0;transform:translate3d(0,-8vh,0) rotate(0deg);}
+    12%{opacity:1;}
+    100%{opacity:0;transform:translate3d(var(--dx),110vh,0) rotate(360deg);}
+  }
 
-.avatar-box{
-width:150px;
-height:150px;
-margin:auto;
-border-radius:50%;
-padding:5px;
-background:rgba(255,255,255,.15);
-backdrop-filter:blur(10px);
-box-shadow:0 0 30px rgba(255,255,255,.15);
-animation:breathe 4s infinite;
-}
+  .wrap{
+    position:relative;
+    z-index:1;
+    width:min(92vw, 470px);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:18px;
+    padding:24px 12px 34px;
+  }
 
-.avatar-box img{
-width:100%;
-height:100%;
-border-radius:50%;
-object-fit:cover;
-}
+  .avatar-shell{
+    width:148px;height:148px;padding:8px;border-radius:50%;
+    background:rgba(255,255,255,.06);
+    box-shadow:0 0 0 1 rgba(255,255,255,.11),0 16px 48px rgba(0,0,0,.36);
+    backdrop-filter: blur(10px);
+    animation:breathe 4.8s ease-in-out infinite;
+  }
 
-@keyframes breathe{
-0%,100%{
-transform:scale(1);
-}
-50%{
-transform:scale(1.05);
-}
-}
+  .avatar-shell img{
+    width:100%;height:100%;display:block;border-radius:50%;object-fit:cover;
+    filter:grayscale(.08) brightness(.88) contrast(1.04);
+  }
 
-#text{
-margin-top:35px;
-font-size:28px;
-font-weight:600;
-line-height:1.8;
-color:white;
-min-height:120px;
-text-shadow:0 0 20px rgba(255,255,255,.2);
-}
+  @keyframes breathe{
+    0%,100%{transform:scale(1);}
+    50%{transform:scale(1.055);}
+  }
 
-.char{
-display:inline-block;
-animation:show .25s forwards;
-opacity:0;
-}
+  .title{font-size:14px;letter-spacing:.22em;color:rgba(255,255,255,.44);text-transform:uppercase;transform:translateY(2px);user-select:none;}
 
-@keyframes show{
-from{
-opacity:0;
-transform:translateY(20px);
-}
-to{
-opacity:1;
-transform:translateY(0);
-}
-}
+  #textBox{
+    width:100%;min-height:168px;padding:4px 14px 0;text-align:center;display:flex;align-items:center;justify-content:center;
+  }
 
-/* 开始页面 */
-#start{
-position:fixed;
-inset:0;
-background:rgba(0,0,0,.85);
-display:flex;
-justify-content:center;
-align-items:center;
-flex-direction:column;
-z-index:999;
-}
+  #text{
+    width:100%;
+    font-size:clamp(22px, 5vw, 30px);
+    line-height:1.9;
+    font-weight:600;
+    color:var(--text);
+    text-shadow:0 0 16px rgba(0,0,0,.42);
+    opacity:0;
+    transform:translateY(10px);
+    transition:opacity .8s ease, transform .8s ease, letter-spacing .8s ease, font-size .8s ease;
+    word-break:break-word;
+    white-space:pre-wrap;
+  }
 
-#start h2{
-color:white;
-margin-bottom:20px;
-font-weight:normal;
-}
+  #text.show{opacity:1;transform:translateY(0);}
+  #text.final{font-size:clamp(18px, 4vw, 22px);letter-spacing:.18em;color:rgba(255,255,255,.76);text-shadow:0 0 12px rgba(0,0,0,.34);}
+  #text.tiny{font-size:18px;letter-spacing:.55em;color:rgba(255,255,255,.5);font-weight:500;}
 
-#start button{
-padding:15px 40px;
-border:none;
-border-radius:50px;
-font-size:18px;
-font-weight:bold;
-cursor:pointer;
-}
+  .char{display:inline-block;animation:charIn .22s ease both;}
+  @keyframes charIn{
+    0%{opacity:0;transform:translateY(10px) scale(.72);filter:blur(4px);}
+    100%{opacity:1;transform:translateY(0) scale(1);filter:blur(0);}
+  }
+
+  .hint{color:var(--muted);font-size:13px;letter-spacing:.08em;margin-top:-2px;user-select:none;}
+
+  #startMask{
+    position:fixed;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;
+    background:radial-gradient(circle at 50% 36%, rgba(255,255,255,.06), rgba(0,0,0,0) 34%),linear-gradient(180deg, rgba(0,0,0,.72), rgba(0,0,0,.52));
+    backdrop-filter: blur(8px);
+  }
+
+  .startCard{
+    width:min(86vw, 360px);padding:28px 22px 24px;border-radius:24px;background:rgba(255,255,255,.055);
+    border:1px solid rgba(255,255,255,.12);box-shadow:0 18px 40px rgba(0,0,0,.26);text-align:center;
+  }
+
+  .startTitle{font-size:18px;font-weight:700;letter-spacing:.08em;margin-bottom:10px;}
+  .startSub{font-size:13px;line-height:1.8;color:rgba(255,255,255,.66);margin-bottom:18px;}
+
+  #btn{
+    border:none;outline:none;padding:15px 34px;border-radius:999px;font-size:17px;font-weight:700;color:#151515;
+    background:linear-gradient(180deg, #efefef, #bfbfbf);box-shadow:0 12px 30px rgba(0,0,0,.28);
+  }
+  #btn:active{transform:scale(.97);}
+
+  @media (max-width:480px){
+    .avatar-shell{width:128px;height:128px;}
+    #textBox{min-height:150px;}
+    .title{font-size:12px;}
+  }
 </style>
 </head>
-
 <body>
+<div id="bg"></div>
+<div id="veil"></div>
+<div id="stars"></div>
 
-<div class="bg"></div>
-<div class="overlay"></div>
-
-<div id="start">
-<h2>点一下开始</h2>
-<button id="playBtn">开始</button>
+<div id="startMask">
+  <div class="startCard">
+    <div class="startTitle">点一下开始</div>
+    <div class="startSub">
+      这是一段很安静的告别。<br>
+      记得把声音打开。
+    </div>
+    <button id="btn">开始</button>
+  </div>
 </div>
 
-<div class="container">
+<div class="wrap">
+  <div class="avatar-shell">
+    <img id="avatar" alt="">
+  </div>
 
-<div class="avatar-box">
-<img src="avatar.jpg">
+  <div class="title">my last words</div>
+
+  <div id="textBox">
+    <div id="text"></div>
+  </div>
+
+  <div class="hint">星星会一直落下，直到最后一句出现</div>
 </div>
 
-<div id="text"></div>
-
-</div>
-
-<audio id="bgm" loop preload="auto">
-<source src="我只能离开.mp3" type="audio/mpeg">
-</audio>
+<audio id="bgm" loop preload="auto"></audio>
 
 <script>
+  const bg = document.getElementById('bg');
+  const avatar = document.getElementById('avatar');
+  const bgm = document.getElementById('bgm');
+  const startMask = document.getElementById('startMask');
+  const text = document.getElementById('text');
+  const stars = document.getElementById('stars');
 
-const lines = [
-"宝宝",
-"这可能是我最后一次叫你宝宝了",
-"我想了很久",
-"也终于想通了",
-"也许放手是我最好的选择",
-"我爱你是真的",
-"因为你伤心也是真的",
-"我想或许我不再纠缠你",
-"不再打扰你",
-"你就能开心",
-"我真的好喜欢你",
-"但是我忘了你没有遇到我时",
-"那么开朗",
-"那么爱笑",
-"我就知道我该放手了",
-"我比任何人都爱你",
-"但是我却比不过任何人",
-"很抱歉这段时间对你的打扰",
-"我只想你好好的",
-"只想要你天天开心",
-"我希望我的离开能让你开心",
-"遇到你是我这辈子最大的幸运",
-"但是失去你也是我这辈子最大的遗憾",
-"再也不见了",
-"您"
-];
+  bg.style.background = 'url("my_girl.png") center center / cover no-repeat';
+  bg.style.filter = 'blur(18px) brightness(.36) saturate(.8) contrast(.98)';
+  bg.style.transform = 'scale(1.08)';
 
-const textBox = document.getElementById("text");
-const audio = document.getElementById("bgm");
+  avatar.src = 'avatar.jpg';
+  bgm.src = '我只能离开.mp3';
 
-function sleep(ms){
-return new Promise(resolve=>setTimeout(resolve,ms));
-}
+  const lines = [
+    "宝宝",
+    "这可能是我最后一次叫你宝宝了",
+    "我想了很久",
+    "也终于想通了",
+    "也许放手是我最好的选择",
+    "我爱你是真的",
+    "因为你伤心也是真的",
+    "我想或许我不再纠缠你",
+    "不再打扰你",
+    "你就能开心",
+    "我真的好喜欢你",
+    "但是我忘了你没有遇到我时",
+    "那么开朗",
+    "那么爱笑",
+    "我就知道我该放手了",
+    "我比任何人都爱你",
+    "但是我却比不过任何人",
+    "很抱歉这段时间对你的打扰",
+    "我只想你好好的",
+    "只想要你天天开心",
+    "我希望我的离开能让你开心",
+    "遇到你使我这辈子最大幸运",
+    "但是失去你也是我这辈子最大的遗憾",
+    "再也不见了",
+    "您"
+  ];
 
-async function showLine(str){
+  const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
-textBox.innerHTML="";
+  function spawnStar(){
+    const el = document.createElement('div');
+    el.className = 'star';
+    const glyphs = ['✦','✧','✩','✶','✺'];
+    el.textContent = glyphs[Math.floor(Math.random() * glyphs.length)];
+    el.style.left = Math.random() * 100 + 'vw';
+    el.style.fontSize = (Math.random() * 12 + 9) + 'px';
+    el.style.setProperty('--dx', (Math.random() * 120 - 60).toFixed(0) + 'px');
+    el.style.animationDuration = (Math.random() * 4.8 + 4.2).toFixed(2) + 's';
+    el.style.opacity = '0';
+    stars.appendChild(el);
+    setTimeout(() => el.remove(), 11000);
+  }
 
-for(let i=0;i<str.length;i++){
+  let starTimer = null;
 
-const span=document.createElement("span");
-span.className="char";
-span.innerText=str[i];
+  function startStars(){
+    spawnStar();
+    starTimer = setInterval(spawnStar, 180);
+  }
 
-textBox.appendChild(span);
+  async function typeLine(line){
+    text.classList.remove('final','tiny');
+    text.classList.add('show');
+    text.innerHTML = '';
 
-await sleep(120);
-}
+    if(line === '您'){
+      text.classList.add('tiny');
+    }
 
-await sleep(2200);
+    for(let i = 0; i < line.length; i++){
+      const span = document.createElement('span');
+      span.className = 'char';
+      span.textContent = line[i] === ' ' ? '\u00A0' : line[i];
+      text.appendChild(span);
+      await sleep(120);
+    }
+  }
 
-textBox.style.opacity="0";
+  async function play(){
+    for(let i = 0; i < lines.length; i++){
+      const line = lines[i];
+      await typeLine(line);
 
-await sleep(800);
+      if(i === lines.length - 1){
+        text.classList.add('show');
+        text.classList.add('final');
+        await sleep(5000);
+        return;
+      }
 
-textBox.style.opacity="1";
-}
+      await sleep(2150);
+      text.classList.remove('show');
+      await sleep(850);
+    }
+  }
 
-async function startText(){
+  document.getElementById('btn').addEventListener('click', async () => {
+    startMask.style.opacity = '0';
+    startMask.style.pointerEvents = 'none';
+    setTimeout(() => startMask.remove(), 400);
 
-for(let i=0;i<lines.length;i++){
+    try{
+      await bgm.play();
+    }catch(e){
+      console.warn('audio play failed:', e);
+    }
 
-await showLine(lines[i]);
+    startStars();
+    play();
+  });
 
-}
-
-}
-
-/* 星星 */
-function createStar(){
-
-const star=document.createElement("div");
-
-star.className="star";
-
-star.innerHTML=Math.random()>0.5 ? "✦" : "✧";
-
-star.style.left=Math.random()*100+"vw";
-
-star.style.fontSize=(10+Math.random()*15)+"px";
-
-star.style.animationDuration=(5+Math.random()*5)+"s";
-
-document.body.appendChild(star);
-
-setTimeout(()=>{
-star.remove();
-},10000);
-}
-
-setInterval(createStar,150);
-
-/* 微信兼容播放 */
-
-function playMusic(){
-
-audio.play();
-
-document.addEventListener("WeixinJSBridgeReady",function(){
-
-audio.play();
-
-},false);
-
-if(typeof WeixinJSBridge=="object"){
-
-WeixinJSBridge.invoke("getNetworkType",{},function(){
-
-audio.play();
-
-});
-
-}
-}
-
-document.getElementById("playBtn").onclick=function(){
-
-playMusic();
-
-document.getElementById("start").style.display="none";
-
-startText();
-
-};
-
+  window.addEventListener('beforeunload', () => {
+    if(starTimer) clearInterval(starTimer);
+  });
 </script>
-
 </body>
 </html>
