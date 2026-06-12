@@ -183,7 +183,7 @@
   <div class="hint"></div>
 </div>
 
-<audio id="bgm" loop preload="auto"></audio>
+<audio id="bgm" loop preload="none"></audio>
 
 <script>
   const bg = document.getElementById('bg');
@@ -198,8 +198,7 @@
   bg.style.transform = 'scale(1.08)';
 
   avatar.src = 'avatar.jpg';
-  bgm.src = '我只能离开.mp3';
-
+ 
   const lines = [
     "宝宝",
     "这可能是我最后一次叫你宝宝了",
@@ -248,7 +247,7 @@
 
   function startStars(){
     spawnStar();
-    starTimer = setInterval(spawnStar, 180);
+   starTimer = setInterval(spawnStar, 500);
   }
 
   async function typeLine(line){
@@ -288,20 +287,26 @@
   }
 
   document.getElementById('btn').addEventListener('click', async () => {
-    startMask.style.opacity = '0';
-    startMask.style.pointerEvents = 'none';
-    setTimeout(() => startMask.remove(), 400);
 
-    try{
-      await bgm.play();
-    }catch(e){
-      console.warn('audio play failed:', e);
-    }
+  startMask.style.opacity = '0';
+  startMask.style.pointerEvents = 'none';
 
-    startStars();
-    play();
-  });
+  setTimeout(() => {
+    startMask.remove();
+  }, 400);
 
+  // 点击后再加载音乐
+  bgm.src = '我只能离开.mp3';
+
+  try{
+    await bgm.play();
+  }catch(e){
+    console.warn(e);
+  }
+
+  startStars();
+  play();
+});
   window.addEventListener('beforeunload', () => {
     if(starTimer) clearInterval(starTimer);
   });
