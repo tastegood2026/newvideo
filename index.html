@@ -2,8 +2,8 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>最后一次叫你宝宝</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+<title>给你的最后一封信</title>
 
 <style>
 
@@ -21,8 +21,7 @@ font-family:"Microsoft YaHei";
 }
 
 body{
-
-background:url("images/bg.jpg") center center/cover no-repeat;
+background:url("bg.jpg") center center/cover no-repeat;
 }
 
 body::before{
@@ -33,7 +32,8 @@ top:0;
 width:100%;
 height:100%;
 background:rgba(0,0,0,.45);
-backdrop-filter:blur(6px);
+backdrop-filter:blur(8px);
+z-index:0;
 }
 
 #start{
@@ -42,19 +42,33 @@ left:0;
 top:0;
 width:100%;
 height:100%;
-z-index:99;
-
+background:#000;
+z-index:999;
 display:flex;
 justify-content:center;
 align-items:center;
-
-background:#000;
+flex-direction:column;
 color:#fff;
 font-size:24px;
-letter-spacing:4px;
+letter-spacing:3px;
 }
 
-#container{
+#heart{
+font-size:60px;
+margin-bottom:20px;
+animation:heart 1.5s infinite;
+}
+
+@keyframes heart{
+0%,100%{
+transform:scale(1);
+}
+50%{
+transform:scale(1.25);
+}
+}
+
+.container{
 position:relative;
 z-index:2;
 height:100%;
@@ -62,17 +76,17 @@ display:flex;
 flex-direction:column;
 justify-content:center;
 align-items:center;
-padding:30px;
+padding:20px;
 }
 
 .avatar{
-width:140px;
-height:140px;
+width:150px;
+height:150px;
 border-radius:50%;
 overflow:hidden;
 border:3px solid rgba(255,255,255,.8);
-
-animation:breath 3s infinite;
+box-shadow:0 0 30px rgba(255,255,255,.3);
+animation:avatarBreath 4s infinite;
 }
 
 .avatar img{
@@ -81,7 +95,7 @@ height:100%;
 object-fit:cover;
 }
 
-@keyframes breath{
+@keyframes avatarBreath{
 0%,100%{
 transform:scale(1);
 }
@@ -92,21 +106,22 @@ transform:scale(1.08);
 
 #text{
 
-margin-top:40px;
+margin-top:50px;
 
-max-width:90%;
-
-color:white;
-
-font-size:26px;
+font-size:28px;
 
 line-height:1.8;
 
+color:#fff;
+
 text-align:center;
 
-min-height:150px;
+max-width:90%;
 
-text-shadow:0 0 15px rgba(255,255,255,.4);
+min-height:120px;
+
+text-shadow:0 0 15px rgba(255,255,255,.5);
+
 }
 
 .snow{
@@ -123,19 +138,30 @@ transform:translateY(110vh);
 }
 }
 
+.fade{
+animation:fade 1s forwards;
+}
+
+@keyframes fade{
+to{
+opacity:0;
+}
+}
+
 </style>
 </head>
 
 <body>
 
 <div id="start">
-点击屏幕开始
+<div id="heart">❤</div>
+<div>点击屏幕开始</div>
 </div>
 
-<div id="container">
+<div class="container">
 
 <div class="avatar">
-<img src="images/avatar.jpg">
+<img src="avatar.jpg">
 </div>
 
 <div id="text"></div>
@@ -143,12 +169,12 @@ transform:translateY(110vh);
 </div>
 
 <audio id="bgm" loop>
-<source src="music/miss.mp3">
+<source src="miss.mp3" type="audio/mpeg">
 </audio>
 
 <script>
 
-const lines = [
+const lines=[
 
 "宝宝",
 
@@ -210,7 +236,7 @@ const lines = [
 
 const text=document.getElementById("text");
 
-function typeLine(content){
+function typeLine(str){
 
 return new Promise(resolve=>{
 
@@ -220,15 +246,35 @@ let i=0;
 
 let timer=setInterval(()=>{
 
-text.innerHTML+=content.charAt(i);
+text.innerHTML+=str.charAt(i);
 
 i++;
 
-if(i>=content.length){
+if(i>=str.length){
 
 clearInterval(timer);
 
-setTimeout(resolve,2500);
+setTimeout(()=>{
+
+if(str!=="再也不见了"){
+
+text.classList.add("fade");
+
+setTimeout(()=>{
+
+text.classList.remove("fade");
+
+resolve();
+
+},1000);
+
+}else{
+
+resolve();
+
+}
+
+},2500);
 
 }
 
@@ -238,15 +284,41 @@ setTimeout(resolve,2500);
 
 }
 
-async function showAll(){
+async function showLines(){
 
-for(let line of lines){
+for(let item of lines){
 
-await typeLine(line);
+await typeLine(item);
+
+}
 
 }
 
+function createSnow(){
+
+let snow=document.createElement("div");
+
+snow.className="snow";
+
+snow.innerHTML="❄";
+
+snow.style.left=Math.random()*100+"vw";
+
+snow.style.fontSize=(Math.random()*20+10)+"px";
+
+snow.style.animationDuration=(Math.random()*6+5)+"s";
+
+document.body.appendChild(snow);
+
+setTimeout(()=>{
+
+snow.remove();
+
+},12000);
+
 }
+
+setInterval(createSnow,200);
 
 document.getElementById("start").onclick=function(){
 
@@ -254,35 +326,9 @@ this.style.display="none";
 
 document.getElementById("bgm").play();
 
-showAll();
+showLines();
 
-}
-
-function snow(){
-
-let s=document.createElement("div");
-
-s.className="snow";
-
-s.innerHTML="❄";
-
-s.style.left=Math.random()*100+"vw";
-
-s.style.fontSize=Math.random()*20+10+"px";
-
-s.style.animationDuration=Math.random()*5+5+"s";
-
-document.body.appendChild(s);
-
-setTimeout(()=>{
-
-s.remove();
-
-},10000);
-
-}
-
-setInterval(snow,200);
+};
 
 </script>
 
